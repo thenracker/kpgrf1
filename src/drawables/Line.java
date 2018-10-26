@@ -15,6 +15,6 @@ public class Line implements Drawable {
 
     @Override
     public void draw(Renderer renderer) {
-        renderer.lineDDA(x1, y1, x2, y2);
+        renderer.lineTrivial(x1, y1, x2, y2);
     }
 }
