@@ -36,7 +36,7 @@ public class Transformer {
         // TODO 1.) vynásobit body maticí
         // TODO 2.) ořez dle W bodů
         // TODO 3.) tvorba z vektorů dehomogenizací (Point3D.dehomog())
-        // TODO 4. ořez zobrazovací objem
+        // TODO 4.) ořez zobrazovací objem
         // TODO 5.) přepočet souřadnic na výšku/šírku našeho okna (viewport)
         // TODO 6.) výsledek vykreslit
         //lineDDA((int) v1.getX(), (int) v1.getY(), (int) v2.getX(), (int) v2.getY(), color);
