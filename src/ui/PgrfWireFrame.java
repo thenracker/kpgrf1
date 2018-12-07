@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import solids.Axis;
 import solids.Cube;
 import solids.Solid;
 import transforms.Camera;
@@ -118,7 +119,8 @@ public class PgrfWireFrame extends JFrame {
     }
 
     private void initSolids() {
-        // todo osy, více objektů
+        // todo více objektů
+        solids.add(new Axis());
 
         int count = 5;
         for (int i = 0; i < count; i++) {

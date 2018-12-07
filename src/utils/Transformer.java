@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
+import solids.Axis;
 import solids.Solid;
 import transforms.Mat4;
 import transforms.Mat4Identity;
@@ -29,12 +30,17 @@ public class Transformer {
     public void drawWireFrame(Solid solid) {
 
         Mat4 matFinal;
-        matFinal = model.mul(view).mul(projection);
+        if (solid instanceof Axis){
+            matFinal = view.mul(projection);
+        } else {
+            matFinal = model.mul(view).mul(projection);
+        }
 
         for (int i = 0; i < solid.getIndices().size(); i += 2) {
             Point3D a = solid.getVertices().get(solid.getIndices().get(i));
             Point3D b = solid.getVertices().get(solid.getIndices().get(i + 1));
-            transformEdge(matFinal, a, b, Color.BLACK.getRGB());
+            transformEdge(matFinal, a, b,
+                    solid.getColorByEdge(i / 2));
         }
     }
 

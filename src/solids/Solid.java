@@ -1,5 +1,6 @@
 package solids;
 
+import java.awt.Color;
 import java.util.List;
 
 import transforms.Point3D;
@@ -11,5 +12,9 @@ public interface Solid {
 
     // index buffer
     List<Integer> getIndices();
+
+    default int getColorByEdge(int index){
+        return Color.BLACK.getRGB();
+    }
 
 }
