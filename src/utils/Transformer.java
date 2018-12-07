@@ -1,11 +1,14 @@
 package utils;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 import solids.Solid;
 import transforms.Mat4;
 import transforms.Mat4Identity;
 import transforms.Point3D;
+import transforms.Vec3D;
 
 public class Transformer {
 
@@ -27,19 +30,50 @@ public class Transformer {
 
         // TODO vypočítat výslednou matici z model,view,projection
         Mat4 matFinal;
+        matFinal = model.mul(view).mul(projection);
 
-        // TODO z indices a vertices poskládat hranu z dvou bodů
-        //transformEdge(matFinal, a, b, Color.BLACK.getRGB());
+        for (int i = 0; i < solid.getIndices().size(); i += 2) {
+            Point3D a = solid.getVertices().get(solid.getIndices().get(i));
+            Point3D b = solid.getVertices().get(solid.getIndices().get(i + 1));
+            transformEdge(matFinal, a, b, Color.BLACK.getRGB());
+        }
     }
 
     private void transformEdge(Mat4 matFinal, Point3D p1, Point3D p2, int color) {
-        // TODO 1.) vynásobit body maticí
-        // TODO 2.) ořez dle W bodů
-        // TODO 3.) tvorba z vektorů dehomogenizací (Point3D.dehomog())
+        // 1.) vynásobit body maticí
+        p1 = p1.mul(matFinal);
+        p2 = p2.mul(matFinal);
+
+        // 2.) ořez dle W bodů
+        if (p1.getW() <= 0 && p2.getW() <= 0) return;
+
+        // 3.) tvorba z vektorů dehomogenizací (Point3D.dehomog())
+        Optional<Vec3D> vo1 = p1.dehomog();
+        Optional<Vec3D> vo2 = p2.dehomog();
+
+        if (!vo1.isPresent() || !vo2.isPresent())return;
+
+        Vec3D v1 = vo1.get();
+        Vec3D v2 = vo2.get();
+
+        v1 = v1.mul(new Vec3D(1,-1,1))
+                .add(new Vec3D(1, 1, 0))
+                .mul(new Vec3D(
+                        0.5 * (img.getWidth() - 1),
+                        0.5 * (img.getHeight() - 1),
+                        1
+                ));
+        v2 = v2.mul(new Vec3D(1,-1,1))
+                .add(new Vec3D(1,1,0))
+                .mul(new Vec3D(
+                        0.5 * (img.getWidth() - 1),
+                        0.5 * (img.getHeight() - 1),
+                        1
+                ));
+
         // TODO 4.) ořez zobrazovací objem
-        // TODO 5.) přepočet souřadnic na výšku/šírku našeho okna (viewport)
-        // TODO 6.) výsledek vykreslit
-        //lineDDA((int) v1.getX(), (int) v1.getY(), (int) v2.getX(), (int) v2.getY(), color);
+
+        lineDDA((int) v1.getX(), (int) v1.getY(), (int) v2.getX(), (int) v2.getY(), color);
     }
 
     // metody vykreslování

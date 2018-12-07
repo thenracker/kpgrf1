@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import solids.Cube;
 import solids.Solid;
 import utils.Transformer;
 
@@ -109,7 +110,8 @@ public class PgrfWireFrame extends JFrame {
     }
 
     private void initSolids() {
-        // todo přidat tělesa, osy apod
+        // todo osy, více objektů
+        solids.add(new Cube(2));
     }
 
     private void draw() {
