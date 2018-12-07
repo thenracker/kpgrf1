@@ -28,7 +28,6 @@ public class Transformer {
 
     public void drawWireFrame(Solid solid) {
 
-        // TODO vypočítat výslednou matici z model,view,projection
         Mat4 matFinal;
         matFinal = model.mul(view).mul(projection);
 

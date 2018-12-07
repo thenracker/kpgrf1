@@ -17,6 +17,11 @@ import javax.swing.WindowConstants;
 
 import solids.Cube;
 import solids.Solid;
+import transforms.Camera;
+import transforms.Mat4PerspRH;
+import transforms.Mat4RotZ;
+import transforms.Mat4Transl;
+import transforms.Point3D;
 import utils.Transformer;
 
 public class PgrfWireFrame extends JFrame {
@@ -28,6 +33,7 @@ public class PgrfWireFrame extends JFrame {
     private BufferedImage img;
 
     private Transformer transformer;
+    private Camera camera;
     private List<Solid> solids;
 
     private int beginX, beginY; // ovládání myší
@@ -49,8 +55,10 @@ public class PgrfWireFrame extends JFrame {
         add(panel);
         solids = new ArrayList<>();
 
-        // TODO instanci transformera a nastavit projekci, instanci camery
         transformer = new Transformer(img);
+        camera = new Camera();
+        transformer.setProjection(
+                new Mat4PerspRH(1,1,1,100));
 
         // vytvoření objektů
         initSolids();
@@ -67,8 +75,8 @@ public class PgrfWireFrame extends JFrame {
         panel.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                // todo camera = camera.addAzimuth((Math.PI / 1000) * (beginX - e.getX()));
-                // todo camera = camera.addZenith((Math.PI / 1000) * (beginY - e.getY()));
+                camera = camera.addAzimuth((Math.PI / 1000) * (beginX - e.getX()));
+                camera = camera.addZenith((Math.PI / 1000) * (beginY - e.getY()));
                 beginX = e.getX();
                 beginY = e.getY();
                 super.mouseDragged(e);
@@ -80,16 +88,16 @@ public class PgrfWireFrame extends JFrame {
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_UP:
-                        // todo camera = camera.forward(0.1);
+                        camera = camera.forward(0.1);
                         break;
                     case KeyEvent.VK_DOWN:
-                        // todo camera = camera.backward(0.1);
+                        camera = camera.backward(0.1);
                         break;
                     case KeyEvent.VK_LEFT:
-                        // todo camera = camera.left(0.1);
+                        camera = camera.left(0.1);
                         break;
                     case KeyEvent.VK_RIGHT:
-                        // todo camera = camera.right(0.1);
+                        camera = camera.right(0.1);
                         break;
 
                 }
@@ -111,14 +119,30 @@ public class PgrfWireFrame extends JFrame {
 
     private void initSolids() {
         // todo osy, více objektů
-        solids.add(new Cube(2));
+
+        int count = 5;
+        for (int i = 0; i < count; i++) {
+            Cube cube = new Cube(1);
+            for (int j = 0; j < cube.getVertices().size(); j++) {
+                Point3D p = cube.getVertices().get(j);
+                Point3D n = p
+                        .mul(new Mat4Transl(0,2,0))
+                        .mul(new Mat4RotZ((double)
+                                i * 2d * Math.PI / (double) count));
+                cube.getVertices().set(j, n);
+            }
+            solids.add(cube);
+        }
+
     }
 
     private void draw() {
         // clear
         img.getGraphics().fillRect(0, 0, img.getWidth(), img.getHeight());
 
-        // todo práce s transformerem - nastavit matice, vykreslit solids
+        // transformer.setModel() todo
+        transformer.setView(camera.getViewMatrix());
+
         for (Solid solid : solids) {
             transformer.drawWireFrame(solid); // výkres solids
         }
