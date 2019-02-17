@@ -141,11 +141,13 @@ public class PgrfWireFrame extends JFrame {
     private void draw() {
         // clear
         img.getGraphics().fillRect(0, 0, img.getWidth(), img.getHeight());
+        // TODO transformer - clear zBuffer !
 
         // transformer.setModel() todo
         transformer.setView(camera.getViewMatrix());
 
         for (Solid solid : solids) {
+            // TODO if na drát / model
             transformer.drawWireFrame(solid); // výkres solids
         }
 

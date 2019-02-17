@@ -24,19 +24,19 @@ public class Cube extends SolidBase {
         vertices.add(new Point3D(size, 0, size));
         vertices.add(new Point3D(size, size, size));
 
-        indices.add(0); indices.add(1);
-        indices.add(1); indices.add(3);
-        indices.add(2); indices.add(3);
-        indices.add(2); indices.add(0);
+        indicesLine.add(0); indicesLine.add(1);
+        indicesLine.add(1); indicesLine.add(3);
+        indicesLine.add(2); indicesLine.add(3);
+        indicesLine.add(2); indicesLine.add(0);
 
-        indices.add(4); indices.add(5);
-        indices.add(5); indices.add(7);
-        indices.add(6); indices.add(7);
-        indices.add(6); indices.add(4);
+        indicesLine.add(4); indicesLine.add(5);
+        indicesLine.add(5); indicesLine.add(7);
+        indicesLine.add(6); indicesLine.add(7);
+        indicesLine.add(6); indicesLine.add(4);
 
-        indices.add(0); indices.add(4);
-        indices.add(1); indices.add(5);
-        indices.add(2); indices.add(6);
-        indices.add(3); indices.add(7);
+        indicesLine.add(0); indicesLine.add(4);
+        indicesLine.add(1); indicesLine.add(5);
+        indicesLine.add(2); indicesLine.add(6);
+        indicesLine.add(3); indicesLine.add(7);
     }
 }

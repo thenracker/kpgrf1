@@ -12,9 +12,9 @@ public class Axis extends SolidBase {
         vertices.add(new Point3D(0,1,0));
         vertices.add(new Point3D(0,0,1));
 
-        indices.add(0); indices.add(1);
-        indices.add(0); indices.add(2);
-        indices.add(0); indices.add(3);
+        indicesLine.add(0); indicesLine.add(1);
+        indicesLine.add(0); indicesLine.add(2);
+        indicesLine.add(0); indicesLine.add(3);
     }
 
     @Override

@@ -1,18 +1,21 @@
 package solids;
 
+import transforms.Point3D;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import transforms.Point3D;
 
 public abstract class SolidBase implements Solid {
 
     protected List<Point3D> vertices;
-    protected List<Integer> indices;
+    protected List<Integer> indicesLine;
+    protected List<Integer> indicesTriangle; // TODO naplnit
+    // todo další primitiva
 
-    public SolidBase(){
+    public SolidBase() {
         vertices = new ArrayList<>();
-        indices = new ArrayList<>();
+        indicesLine = new ArrayList<>();
+        indicesTriangle = new ArrayList<>();
     }
 
     @Override
@@ -21,7 +24,11 @@ public abstract class SolidBase implements Solid {
     }
 
     @Override
-    public List<Integer> getIndices() {
-        return indices;
+    public List<Integer> getIndices(Primitive primitive) {
+        if (primitive == Primitive.LINES) {
+            return indicesLine;
+        } else {
+            return indicesTriangle;
+        }
     }
 }

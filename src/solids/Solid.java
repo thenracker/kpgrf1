@@ -11,7 +11,7 @@ public interface Solid {
     List<Point3D> getVertices();
 
     // index buffer
-    List<Integer> getIndices();
+    List<Integer> getIndices(Primitive primitive);
 
     default int getColorByEdge(int index){
         return Color.BLACK.getRGB();

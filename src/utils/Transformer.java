@@ -1,15 +1,16 @@
 package utils;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.util.Optional;
-
 import solids.Axis;
+import solids.Primitive;
 import solids.Solid;
 import transforms.Mat4;
 import transforms.Mat4Identity;
 import transforms.Point3D;
 import transforms.Vec3D;
+
+import java.awt.image.BufferedImage;
+import java.util.List;
+import java.util.Optional;
 
 public class Transformer {
 
@@ -30,18 +31,23 @@ public class Transformer {
     public void drawWireFrame(Solid solid) {
 
         Mat4 matFinal;
-        if (solid instanceof Axis){
+        if (solid instanceof Axis) {
             matFinal = view.mul(projection);
         } else {
             matFinal = model.mul(view).mul(projection);
         }
 
-        for (int i = 0; i < solid.getIndices().size(); i += 2) {
-            Point3D a = solid.getVertices().get(solid.getIndices().get(i));
-            Point3D b = solid.getVertices().get(solid.getIndices().get(i + 1));
+        List<Integer> indices = solid.getIndices(Primitive.LINES);
+        for (int i = 0; i < indices.size(); i += 2) {
+            Point3D a = solid.getVertices().get(indices.get(i));
+            Point3D b = solid.getVertices().get(indices.get(i + 1));
             transformEdge(matFinal, a, b,
                     solid.getColorByEdge(i / 2));
         }
+    }
+
+    public void drawFilledFrame(Solid solid) { // z-buffer
+        // TODO!
     }
 
     private void transformEdge(Mat4 matFinal, Point3D p1, Point3D p2, int color) {
@@ -56,20 +62,20 @@ public class Transformer {
         Optional<Vec3D> vo1 = p1.dehomog();
         Optional<Vec3D> vo2 = p2.dehomog();
 
-        if (!vo1.isPresent() || !vo2.isPresent())return;
+        if (!vo1.isPresent() || !vo2.isPresent()) return;
 
         Vec3D v1 = vo1.get();
         Vec3D v2 = vo2.get();
 
-        v1 = v1.mul(new Vec3D(1,-1,1))
+        v1 = v1.mul(new Vec3D(1, -1, 1))
                 .add(new Vec3D(1, 1, 0))
                 .mul(new Vec3D(
                         0.5 * (img.getWidth() - 1),
                         0.5 * (img.getHeight() - 1),
                         1
                 ));
-        v2 = v2.mul(new Vec3D(1,-1,1))
-                .add(new Vec3D(1,1,0))
+        v2 = v2.mul(new Vec3D(1, -1, 1))
+                .add(new Vec3D(1, 1, 0))
                 .mul(new Vec3D(
                         0.5 * (img.getWidth() - 1),
                         0.5 * (img.getHeight() - 1),
