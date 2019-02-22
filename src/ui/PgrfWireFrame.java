@@ -18,11 +18,7 @@ import javax.swing.WindowConstants;
 import solids.Axis;
 import solids.Cube;
 import solids.Solid;
-import transforms.Camera;
-import transforms.Mat4PerspRH;
-import transforms.Mat4RotZ;
-import transforms.Mat4Transl;
-import transforms.Point3D;
+import transforms.*;
 import utils.Transformer;
 
 public class PgrfWireFrame extends JFrame {
@@ -58,6 +54,9 @@ public class PgrfWireFrame extends JFrame {
 
         transformer = new Transformer(img);
         camera = new Camera();
+        camera = camera.withPosition(new Vec3D(-6.6, -3.3,4.5));
+        camera = camera.withZenith(-0.549);
+        camera = camera.withAzimuth(0.5);
         transformer.setProjection(
                 new Mat4PerspRH(1,1,1,100));
 
