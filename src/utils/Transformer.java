@@ -1,6 +1,5 @@
 package utils;
 
-import drawables.Point;
 import solids.Axis;
 import solids.Primitive;
 import solids.Solid;
@@ -9,6 +8,7 @@ import transforms.Mat4Identity;
 import transforms.Point3D;
 import transforms.Vec3D;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Optional;
@@ -21,12 +21,16 @@ public class Transformer {
     private Mat4 view;
     private Mat4 projection;
 
+    private double[][] zBuffer;
+
     public Transformer(BufferedImage img) {
         this.img = img;
         // prozatím jednotkové matice
         this.model = new Mat4Identity();
         this.view = new Mat4Identity();
         this.projection = new Mat4Identity();
+
+        this.zBuffer = new double[img.getWidth()][img.getHeight()];
     }
 
     public void drawWireFrame(Solid solid) {
@@ -53,8 +57,8 @@ public class Transformer {
         List<Integer> indices = solid.getIndices(Primitive.TRIANGLES);
         for (int i = 0; i < indices.size() - 2; i += 3) {
             Point3D p1 = solid.getVertices().get(indices.get(i));
-            Point3D p2 = solid.getVertices().get(indices.get(i+1));
-            Point3D p3 = solid.getVertices().get(indices.get(i+2));
+            Point3D p2 = solid.getVertices().get(indices.get(i + 1));
+            Point3D p3 = solid.getVertices().get(indices.get(i + 2));
             transformTriangles(p1, p2, p3, matFinal);
         }
     }
@@ -162,8 +166,71 @@ public class Transformer {
                 ));
 
 
-        // scanline (seřazení, interpolace = rasterizace)
+        scanLine(v1, v2, v3, Color.RED.getRGB());
 
+    }
+
+    private void scanLine(Vec3D v1, Vec3D v2, Vec3D v3, int color) {
+        // seřazení dle Y
+        if (v1.getY() > v2.getY()) {
+            Vec3D v = v1;
+            v1 = v2;
+            v2 = v;
+        }
+        if (v2.getY() > v3.getY()) {
+            Vec3D v = v2;
+            v2 = v3;
+            v3 = v;
+        }
+        if (v1.getY() > v2.getY()) {
+            Vec3D v = v1;
+            v1 = v2;
+            v2 = v;
+        }
+
+        // od V1 do V2
+        for (int y = (int) v1.getY() + 1; y <= v2.getY(); y++) {
+            double s1 = (y - v1.getY()) / (v2.getY() - v1.getY());
+            double s2 = (y - v1.getY()) / (v3.getY() - v1.getY());
+
+            double x1 = (v1.getX() * (1 - s1) + v2.getX() * s1);
+            double x2 = (v1.getX() * (1 - s2) + v3.getX() * s2);
+
+            double z1 = (v1.getZ() * (1 - s1) + v2.getZ() * s1);
+            double z2 = (v1.getZ() * (1 - s2) + v3.getZ() * s2);
+
+            // seřazení dle X
+            if (x1 > x2) {
+                double a = x1;
+                x1 = x2;
+                x2 = a;
+                a = z1;
+                z1 = z2;
+                z2 = a;
+            }
+
+            for (int x = (int) x1; x <= x2; x++) {
+                double t = (x - x1) / (x2 - x1);
+                double z = (z1 * (1 - t) + z2 * t);
+
+                if (x > 0
+                        && y > 0
+                        && x < img.getWidth() - 1
+                        && y < img.getHeight() - 1
+                        && z < zBuffer[x][y]) {
+                    drawPixel(x, y, color);
+                    zBuffer[x][y] = z;
+                }
+            }
+        }
+
+        // od V2 do V3 TODO
+    }
+
+    public void clear() {
+        for(int x = 0; x < img.getWidth(); x++)
+            for(int y = 0; y < img.getHeight(); y++)
+                zBuffer[x][y] = 1.0;
     }
 
     private void transformEdge(Mat4 matFinal, Point3D p1, Point3D p2, int color) {

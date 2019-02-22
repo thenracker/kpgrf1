@@ -143,6 +143,7 @@ public class PgrfWireFrame extends JFrame {
         // TODO transformer - clear zBuffer !
 
         // transformer.setModel() todo
+        transformer.clear();
         transformer.setView(camera.getViewMatrix());
 
         for (Solid solid : solids) {
