@@ -15,28 +15,25 @@ public class Cube extends SolidBase {
 		 */
 
     public Cube(double size){
+
         vertices.add(new Point3D(0, 0, 0));
-        vertices.add(new Point3D(0, size, 0));
         vertices.add(new Point3D(size, 0, 0));
         vertices.add(new Point3D(size, size, 0));
+        vertices.add(new Point3D(0, size, 0));
+
         vertices.add(new Point3D(0, 0, size));
-        vertices.add(new Point3D(0, size, size));
         vertices.add(new Point3D(size, 0, size));
         vertices.add(new Point3D(size, size, size));
+        vertices.add(new Point3D(0, size, size));
 
-        indicesLine.add(0); indicesLine.add(1);
-        indicesLine.add(1); indicesLine.add(3);
-        indicesLine.add(2); indicesLine.add(3);
-        indicesLine.add(2); indicesLine.add(0);
+        for (int i = 0; i < 4; i++) { // hrany
+            indicesLine.add(i); indicesLine.add((i + 1) % 4);
+            indicesLine.add(i); indicesLine.add(i + 4);
+            indicesLine.add(i + 4); indicesLine.add((i + 1) % 4 + 4);
+        }
 
-        indicesLine.add(4); indicesLine.add(5);
-        indicesLine.add(5); indicesLine.add(7);
-        indicesLine.add(6); indicesLine.add(7);
-        indicesLine.add(6); indicesLine.add(4);
-
-        indicesLine.add(0); indicesLine.add(4);
-        indicesLine.add(1); indicesLine.add(5);
-        indicesLine.add(2); indicesLine.add(6);
-        indicesLine.add(3); indicesLine.add(7);
+        // plochy
+        indicesTriangle.add(0); indicesTriangle.add(1); indicesTriangle.add(2); //spodek vpravo
+        // TODO zbytek
     }
 }
