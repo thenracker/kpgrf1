@@ -33,7 +33,22 @@ public class Cube extends SolidBase {
         }
 
         // plochy
-        indicesTriangle.add(0); indicesTriangle.add(1); indicesTriangle.add(2); //spodek vpravo
-        // TODO zbytek
+        indicesTriangle.add(0); indicesTriangle.add(1); indicesTriangle.add(2); //spodek
+        indicesTriangle.add(0); indicesTriangle.add(2); indicesTriangle.add(3);
+
+        indicesTriangle.add(0); indicesTriangle.add(1); indicesTriangle.add(5); //předek
+        indicesTriangle.add(0); indicesTriangle.add(4); indicesTriangle.add(5);
+
+        indicesTriangle.add(1); indicesTriangle.add(2); indicesTriangle.add(6); //vpravo
+        indicesTriangle.add(1); indicesTriangle.add(5); indicesTriangle.add(6);
+
+        indicesTriangle.add(2); indicesTriangle.add(3); indicesTriangle.add(7); //vzadu
+        indicesTriangle.add(2); indicesTriangle.add(6); indicesTriangle.add(7);
+
+        indicesTriangle.add(3); indicesTriangle.add(0); indicesTriangle.add(4); //vlevo
+        indicesTriangle.add(3); indicesTriangle.add(4); indicesTriangle.add(7);
+
+        indicesTriangle.add(4); indicesTriangle.add(5); indicesTriangle.add(6); //vršek
+        indicesTriangle.add(4); indicesTriangle.add(6); indicesTriangle.add(7);
     }
 }

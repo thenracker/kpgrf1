@@ -147,6 +147,7 @@ public class PgrfWireFrame extends JFrame {
 
         for (Solid solid : solids) {
             // TODO if na drát / model
+            transformer.drawFilledFrame(solid);
             transformer.drawWireFrame(solid); // výkres solids
         }
 
